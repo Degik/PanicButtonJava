@@ -13,8 +13,8 @@ public class contactsList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_list);
 
-        ArrayAdapter<Contact> arrayAdapter = new ArrayAdapter<Contact>(this, R.layout.activity_contacts_list, MainActivity.user.getContacts());
-        ListView listView = (ListView) findViewById(R.id._dynamic);
+        //ArrayAdapter<Contact> arrayAdapter = new ArrayAdapter<Contact>(this, R.layout.activity_contacts_list, MainActivity.user.getContacts());
+        //ListView listView = (ListView) findViewById(R.id._dynamic);
 
     }
 }

@@ -4,13 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_applitcation_settings.xml" value="0.22735507246376813" />
-        <entry key="app/src/main/res/layout/activity_contacts_list.xml" value="0.1511879049676026" />
+        <entry key="app/src/main/res/layout/activity_contacts_list.xml" value="0.18091787772242474" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.26957076805225316" />
         <entry key="app/src/main/res/layout/contactslist.xml" value="0.24501479881397187" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
