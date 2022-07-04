@@ -11,7 +11,8 @@
         android:theme="@style/Theme.RGBJava">
         <activity
             android:name=".addContact"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".contactsList" />
         <activity
             android:name=".applitcationSettings"
             android:exported="false"
