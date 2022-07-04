@@ -12,11 +12,14 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonContactsList;
     private Button buttonPanic;
     private Button settingsButton;
+    public static User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        user = new User("Davide", "Bulotta", "3284888702");
 
         buttonContactsList = (Button) findViewById(R.id.contactsListButton);
         buttonContactsList.setOnClickListener(new View.OnClickListener() {

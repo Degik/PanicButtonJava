@@ -8,11 +8,11 @@ public class User {
     private String name;
     private String lastName;
     // Lista dei contatti
-    private List<Contact> contacts;
+    private ArrayList<Contact> contacts;
     private String phoneNumber;
 
 
-    public User(String name, String lastnName, String phoneNumber){
+    public User(String name, String lastName, String phoneNumber){
         this.name = name;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -53,6 +53,9 @@ public class User {
         return null;
     }// Ricavo l'oggetto contatto
 
+    public ArrayList<Contact> getContacts(){
+        return contacts;
+    }
 
     public boolean deleteContact(Contact c){
         return contacts.remove(c);

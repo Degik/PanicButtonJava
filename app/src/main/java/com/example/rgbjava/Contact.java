@@ -54,4 +54,10 @@ public class Contact {
     public void setFavorite(boolean favorite){
         this.favorite = favorite;
     }
+
+    @Override
+    public String toString(){
+        String s  = "Nome:  " + firstName + " Cognome: " + lastName + " Telefono: " + numberTel + "\n";
+        return s;
+    }
 }
