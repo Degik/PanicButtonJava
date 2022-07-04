@@ -20,6 +20,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         user = new User("Davide", "Bulotta", "3284888702");
+        Contact c1 = new Contact("Isa", "Amore", "096799353", "isabellasanseverino@gmail.com");
+        Contact c2 = new Contact("Giovanni", "Pino", "3358773361", "giovannipino@gmail.com");
+        user.addContact(c1);
+        user.addContact(c2);
 
         buttonContactsList = (Button) findViewById(R.id.contactsListButton);
         buttonContactsList.setOnClickListener(new View.OnClickListener() {
