@@ -6,55 +6,72 @@
     android:layout_height="match_parent"
     tools:context=".contactsList">
 
-    <ListView
-        android:layout_width="290dp"
-        android:layout_height="762dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="1dp"
-        android:id = "@+id/contactsListView"
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="309dp"
+        android:layout_height="681dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.06" >
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-        <TextView
-            android:id="@+id/tvNumberPhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Numero" />
+        <ListView
+            android:id="@+id/contactsListView"
+            android:layout_width="312dp"
+            android:layout_height="673dp">
 
-        <TextView
-            android:id="@+id/tvLastName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cognome" />
-
-        <TextView
-            android:id="@+id/tvFirstName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nome" />
-    </ListView>
+        </ListView>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/addContact"
-        android:layout_width="101dp"
-        android:layout_height="369dp"
+        android:layout_width="90dp"
+        android:layout_height="354dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
         android:text="+"
-        android:textSize = "65dp"
+        android:textSize="65dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/contactsListView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/rmvContact"
-        android:layout_width="101dp"
-        android:layout_height="369dp"
+        android:layout_width="93dp"
+        android:layout_height="365dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
         android:text="-"
-        android:textSize = "65dp"
+        android:textSize="65dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/contactsListView" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="315dp"
+        android:layout_height="42dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvFirstName"
+            android:layout_width="93dp"
+            android:layout_height="wrap_content"
+            android:text="Nome" />
+
+        <TextView
+            android:id="@+id/tvLastName"
+            android:layout_width="89dp"
+            android:layout_height="wrap_content"
+            android:text="Cognome" />
+
+        <TextView
+            android:id="@+id/tvNumberPhone"
+            android:layout_width="87dp"
+            android:layout_height="wrap_content"
+            android:text="Numero" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

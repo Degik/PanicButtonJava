@@ -10,9 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RGBJava">
         <activity
-            android:name=".applitcationSettings"
-            android:parentActivityName=".MainActivity"
+            android:name=".addContact"
             android:exported="false" />
+        <activity
+            android:name=".applitcationSettings"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".contactsList"
             android:exported="false"
