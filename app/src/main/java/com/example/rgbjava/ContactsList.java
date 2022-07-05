@@ -5,11 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class contactsList extends AppCompatActivity {
+public class ContactsList extends AppCompatActivity {
 
     private Button buttonAdd;
 
@@ -34,7 +33,7 @@ public class contactsList extends AppCompatActivity {
     }
 
     public void openAdd(){
-        Intent intentOpenAdd = new Intent(this, addContact.class);
+        Intent intentOpenAdd = new Intent(this, AddContact.class);
         startActivity(intentOpenAdd);
     }
 }

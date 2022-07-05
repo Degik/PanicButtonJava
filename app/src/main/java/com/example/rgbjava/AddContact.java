@@ -6,13 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class addContact extends AppCompatActivity {
+public class AddContact extends AppCompatActivity {
     private Button buttonSave;
     private EditText editFirstName;
     private EditText editLastName;
@@ -42,7 +41,7 @@ public class addContact extends AppCompatActivity {
                     // Creo il contatto
                     Contact c = new Contact(firstName, lastName, phone, email);
                     // Aggiungo il contatto alla lista
-                    MainActivity.user.addContact(c);
+                    MainActivity.contacts.add(c);
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setMessage("Successo").setTitle("Info");
                     builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -70,7 +69,7 @@ public class addContact extends AppCompatActivity {
     }
 
     public void openContactList(){
-        Intent intentOpenContactList = new Intent(this, contactsList.class);
+        Intent intentOpenContactList = new Intent(this, ContactsList.class);
         startActivity(intentOpenContactList);
     }
 
