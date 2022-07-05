@@ -37,6 +37,7 @@ public class BackupFile {
         editor.putString("firstName", firstName);
         editor.putString("lastName", lastName);
         editor.putString("numberPhone", numberPhone);
+        editor.putBoolean("firstStart", false);
         editor.commit();
     }
 
@@ -53,6 +54,11 @@ public class BackupFile {
     public String getNumberPhone(){
         SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
         return settings.getString("lastName", "DEFAULT");
+    }
+
+    public boolean getFirstStart(){
+        SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
+        return settings.getBoolean("firstStart", true);
     }
 
     public ArrayList<Contact> getContactList(){

@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     public static User user;
     public static ArrayList<Contact> contacts;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

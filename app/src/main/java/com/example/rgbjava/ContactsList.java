@@ -27,7 +27,7 @@ public class ContactsList extends AppCompatActivity {
 
         //ArrayAdapter<Contact> arrayAdapter = new ArrayAdapter<Contact>(this, R.layout.activity_contacts_list, MainActivity.user.getContacts());
         //ListView listView = (ListView) findViewById(R.id._dynamic);
-        ContactsAdapter contactsAdapter = new ContactsAdapter(this, MainActivity.user.getContacts());
+        ContactsAdapter contactsAdapter = new ContactsAdapter(this, MainActivity.contacts);
         ListView listView = (ListView) findViewById(R.id.contactsListView);
         listView.setAdapter(contactsAdapter);
     }
