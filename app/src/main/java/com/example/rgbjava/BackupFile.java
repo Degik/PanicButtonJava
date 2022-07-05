@@ -41,7 +41,18 @@ public class BackupFile {
     }
 
     public String getFirstName(){
-        SharedPreferences
+        SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
+        return settings.getString("firstName", "DEFAULT");
+    }
+
+    public String getLastName(){
+        SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
+        return settings.getString("lastName", "DEFAULT");
+    }
+
+    public String getNumberPhone(){
+        SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
+        return settings.getString("lastName", "DEFAULT");
     }
 
     public ArrayList<Contact> getContactList(){
