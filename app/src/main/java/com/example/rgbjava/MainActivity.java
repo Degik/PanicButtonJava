@@ -13,9 +13,12 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonContactsList;
     private Button buttonPanic;
     private Button settingsButton;
-    private BackupFile backupFile;
+    private boolean firstStart;
+
+    public static  BackupFile backupFile;
     public static User user;
     public static ArrayList<Contact> contacts;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
 
         backupFile = new BackupFile(getApplicationContext());
         contacts = backupFile.getContactList();
+
+        // Inserire form per il primo login
+        if(firstStart){
+            openFirstStep();
+        }
 
         buttonContactsList = (Button) findViewById(R.id.contactsListButton);
         buttonContactsList.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
     public void openApplicationSettings(){
         Intent intentApplicationSettings = new Intent(this, ApplitcationSettings.class);
         startActivity(intentApplicationSettings);
+    }
+
+    public void openFirstStep(){
+        Intent intentFirstStep = new Intent(this, FirstStep.class);
+        startActivity(intentFirstStep);
     }
 
 }

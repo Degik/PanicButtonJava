@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RGBJava">
         <activity
+            android:name=".FirstStep"
+            android:exported="false" />
+        <activity
             android:name=".AddContact"
             android:exported="false"
             android:parentActivityName=".ContactsList" />
