@@ -28,12 +28,16 @@ public class FirstStep extends AppCompatActivity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                editFirstName = (EditText) findViewById(R.id.textFirstNameStep);
+                editLastName = (EditText) findViewById(R.id.textLastNameFirstStep);
+                editNumberPhone = (EditText) findViewById(R.id.textNumberPhoneFirstStep);
+
                 String firstName = editFirstName.getText().toString();
                 String lastName = editLastName.getText().toString();
                 String numberPhone = editNumberPhone.getText().toString();
                 if(!(emptyString(firstName) || emptyString(lastName) || emptyString(numberPhone))){
                     MainActivity.backupFile.makeBackupSettings(firstName, lastName, numberPhone);
-
+                    openMain();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setMessage("Attenzione").setTitle("Errore");

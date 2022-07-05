@@ -13,7 +13,6 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonContactsList;
     private Button buttonPanic;
     private Button settingsButton;
-    private boolean firstStart;
 
     public static  BackupFile backupFile;
     public static User user;
@@ -25,12 +24,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         backupFile = new BackupFile(getApplicationContext());
-        contacts = backupFile.getContactList();
+        boolean firstStart = backupFile.getFirstStart();
 
         // Inserire form per il primo login
         if(firstStart){
+            contacts = new ArrayList<Contact>();
+            backupFile.makeBackupContactsList();
             openFirstStep();
         }
+
+        User user = new User(backupFile.getFirstName(), backupFile.getLastName(), backupFile.getNumberPhone());
+        contacts = backupFile.getContactList();
 
         buttonContactsList = (Button) findViewById(R.id.contactsListButton);
         buttonContactsList.setOnClickListener(new View.OnClickListener() {

@@ -42,6 +42,8 @@ public class AddContact extends AppCompatActivity {
                     Contact c = new Contact(firstName, lastName, phone, email);
                     // Aggiungo il contatto alla lista
                     MainActivity.contacts.add(c);
+                    // Effettup il backup
+                    MainActivity.backupFile.makeBackupContactsList();
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setMessage("Successo").setTitle("Info");
                     builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
