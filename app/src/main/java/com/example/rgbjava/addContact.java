@@ -34,7 +34,7 @@ public class addContact extends AppCompatActivity {
                 editLastName = (EditText) findViewById(R.id.textEditLastName);
                 editEmail = (EditText) findViewById(R.id.editEmail);
                 editPhone = (EditText) findViewById(R.id.editPhone);
-                if(!(emptyBox(editFirstName) || emptyBox(editLastName) || emptyBox(editEmail) || emptyBox(editPhone))){
+                if(!(emptyBox(editFirstName) ||  emptyBox(editEmail) || emptyBox(editPhone))){
                     String firstName = editFirstName.getText().toString();
                     String lastName = editLastName.getText().toString();
                     String email = editEmail.getText().toString();
@@ -45,14 +45,25 @@ public class addContact extends AppCompatActivity {
                     MainActivity.user.addContact(c);
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setMessage("Successo").setTitle("Info");
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
                     builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             openContactList();
                         }
                     });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("Attenzione").setTitle("Errore");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 }
             }
         });
