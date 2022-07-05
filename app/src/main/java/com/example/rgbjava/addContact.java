@@ -52,7 +52,7 @@ public class addContact extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             openContactList();
                         }
-                    })
+                    });
                 }
             }
         });
@@ -67,5 +67,6 @@ public class addContact extends AppCompatActivity {
         if(editText.getText().toString().equals("")){
             return true;
         }
+        return false;
     }
 }
