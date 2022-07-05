@@ -7,6 +7,12 @@ public class Contact {
     private String email;
     private boolean favorite;
 
+    public Contact(String firstName, String lastName, String numberTel){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.numberTel = numberTel;
+    }
+
     public Contact(String firstName, String lastName, String numberTel, String email){
         this.firstName = firstName;
         this.lastName = lastName;

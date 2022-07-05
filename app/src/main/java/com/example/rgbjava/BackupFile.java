@@ -8,10 +8,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 public class BackupFile {
-    private final static String LIST_CONTACTS = "contactsList";
+    private final static String CONTACTS = "contacts";
     private final static String SETTINGS  = "settings";
     private static SharedPreferences sharedPreferences;
     private static SharedPreferences.Editor editor;
@@ -25,9 +24,9 @@ public class BackupFile {
         Gson gson = new Gson();
         String jsonString = gson.toJson(MainActivity.contacts);
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPreferences = context.getSharedPreferences(CONTACTS, context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString(LIST_CONTACTS, jsonString);
+        editor.putString(CONTACTS, jsonString);
         editor.apply();
     }
 
@@ -62,8 +61,8 @@ public class BackupFile {
     }
 
     public ArrayList<Contact> getContactList(){
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String jsonString =sharedPreferences.getString(LIST_CONTACTS, "");
+        sharedPreferences = context.getSharedPreferences(CONTACTS, Context.MODE_PRIVATE);
+        String jsonString = sharedPreferences.getString(CONTACTS, "");
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<Contact>>(){}.getType();
         ArrayList<Contact> list = gson.fromJson(jsonString, type);
