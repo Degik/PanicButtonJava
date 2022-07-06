@@ -9,18 +9,23 @@
         android:id="@+id/textFirstNameAdapter"
         android:layout_width="94dp"
         android:layout_height="41dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:text="TextView"
+        app:layout_constraintEnd_toStartOf="@+id/textLastNameAdapter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textLastNameAdapter"
-        android:layout_width="127dp"
+        android:layout_width="97dp"
         android:layout_height="42dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="44dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/textFirstNameAdapter"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,8 +34,13 @@
         android:id="@+id/textNumberPhoneAdapter"
         android:layout_width="96dp"
         android:layout_height="42dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
         android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textLastNameAdapter"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
