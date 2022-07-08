@@ -29,6 +29,17 @@ public class Geo implements Runnable{
     @Override
     public void run(){
         gc = new Geocoder(mContext, Locale.getDefault());
-        //List<Address> list = gc.getFromLocation();
+        //LocationManager locationManager = (LocationManager)Service
+        //List<Address> listAddress = gc.getFromLocation();
+    }
+
+    public static void sleep(int time){
+        for(int i = 0; i < time; i++){
+            try{
+                Thread.sleep(1000);
+            } catch(InterruptedException e){
+                e.printStackTrace();;
+            }
+        }
     }
 }
