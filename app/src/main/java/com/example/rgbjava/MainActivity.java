@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.GnssAntennaInfo;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,8 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean isGpsEnabled;
     private static final long MIN_TIME_UPDATE = 1000 * 30;
     private static final long MIN_DISTANCE_UPDATE = 10;
-    private double longitude;
-    private double latitude;
+    private static double longitude;
+    private static double latitude;
+    private Geo geo;
     //
     public static  BackupFile backupFile;
     public static User user;
@@ -55,7 +57,10 @@ public class MainActivity extends AppCompatActivity {
             backupFile.makeBackupContactsList();
             openFirstStep();
         } else {
-
+            geo = new Geo(this);
+            Thread threadGps = new Thread(geo);
+            getLocation();
+            threadGps.start();
         }
 
         User user = new User(backupFile.getFirstName(), backupFile.getLastName(), backupFile.getNumberPhone());
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                         PackageManager.PERMISSION_GRANTED;
     }
     @SuppressLint("MissingPermission")
-    public Location getLocation(){
+    public void getLocation(){
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         isGpsEnabled = locationManager.isProviderEnabled(locationManager.GPS_PROVIDER);
         //Fare richiesta dei permessi
@@ -111,8 +116,31 @@ public class MainActivity extends AppCompatActivity {
             if(isGpsEnabled){
                 locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, MIN_TIME_UPDATE, MIN_DISTANCE_UPDATE, (LocationListener) this);
                 location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
+                if(location != null){
+                    updateLatitude();
+                    updateLongitude();
+                }
             }
         }
+    }
+
+    private void stopTrackGps(){
+
+    }
+
+    private void updateLatitude() {
+        latitude = location.getLatitude();
+    }
+
+    private void updateLongitude() {
+        longitude = location.getLongitude();
+    }
+
+    public static double getLatitude() {
+        return latitude;
+    }
+
+    public static double getLongitude(){
+        return longitude;
     }
 }

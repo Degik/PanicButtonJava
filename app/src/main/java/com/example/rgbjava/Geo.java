@@ -13,6 +13,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -20,6 +21,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Geo implements Runnable{
     private Geocoder gc;
     private Context mContext;
+    private String addressPos;
+    private final AtomicBoolean running = new AtomicBoolean(false);
 
     public Geo(Context context){
         super();
@@ -28,9 +31,17 @@ public class Geo implements Runnable{
 
     @Override
     public void run(){
-        gc = new Geocoder(mContext, Locale.getDefault());
-        //LocationManager locationManager = (LocationManager)Service
-        //List<Address> listAddress = gc.getFromLocation();
+        running.set(true);
+        while(running.get()){
+            gc = new Geocoder(mContext, Locale.getDefault());
+            try {
+                List<Address> listAddress = gc.getFromLocation(MainActivity.getLatitude(), MainActivity.getLongitude(), 1);
+                addressPos = listAddress.get(0).getAddressLine(0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            sleep(30);
+        }
     }
 
     public static void sleep(int time){
@@ -41,5 +52,9 @@ public class Geo implements Runnable{
                 e.printStackTrace();;
             }
         }
+    }
+
+    public void setStop(){
+        running.set(false);
     }
 }
