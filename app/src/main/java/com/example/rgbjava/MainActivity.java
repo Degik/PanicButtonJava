@@ -1,5 +1,6 @@
 package com.example.rgbjava;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -20,26 +21,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.maps.MapView;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private Button buttonContactsList;
     private Button buttonPanic;
     private Button settingsButton;
+    private int PERMISSION_ID = 44;
     //
-    private LocationManager locationManager;
-    private Location location;
-    private boolean isGpsEnabled;
-    private static final long MIN_TIME_UPDATE = 1000 * 30;
-    private static final long MIN_DISTANCE_UPDATE = 10;
-    private static double longitude;
-    private static double latitude;
+    public LocationManager locationManager;
     private Geo geo;
     //
-    public static  BackupFile backupFile;
+    public static BackupFile backupFile;
     public static User user;
     public static ArrayList<Contact> contacts;
-
 
 
     @SuppressLint("MissingPermission")
@@ -52,15 +49,20 @@ public class MainActivity extends AppCompatActivity {
         boolean firstStart = backupFile.getFirstStart();
 
         // Inserire form per il primo login
-        if(firstStart){
+        if (firstStart) {
             contacts = new ArrayList<Contact>();
             backupFile.makeBackupContactsList();
             openFirstStep();
         } else {
-            geo = new Geo(this);
-            Thread threadGps = new Thread(geo);
-            getLocation();
-            threadGps.start();
+            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            if(checkPerm()){
+                geo = new Geo(this, locationManager);
+                Thread threadGps = new Thread(geo);
+                threadGps.setName("GeoTracker");
+                threadGps.start();
+            } else {
+                requestPerm();
+            }
         }
 
         User user = new User(backupFile.getFirstName(), backupFile.getLastName(), backupFile.getNumberPhone());
@@ -81,66 +83,54 @@ public class MainActivity extends AppCompatActivity {
                 openApplicationSettings();
             }
         });
+
+        buttonPanic = (Button) findViewById(R.id.panicButton);
+        buttonPanic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
     }
 
-    public void opencContactsList(){ // Per aprire la lista dei contatti
+
+    public void opencContactsList() { // Per aprire la lista dei contatti
         Intent intentContactsList = new Intent(this, ContactsList.class);
         startActivity(intentContactsList);
     }
 
-    public void openApplicationSettings(){
+    public void openApplicationSettings() {
         Intent intentApplicationSettings = new Intent(this, ApplitcationSettings.class);
         startActivity(intentApplicationSettings);
     }
 
-    public void openFirstStep(){
+    public void openFirstStep() {
         Intent intentFirstStep = new Intent(this, FirstStep.class);
         startActivity(intentFirstStep);
     }
 
     private boolean checkPerm(){
         return ActivityCompat
-                        .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
-                        PackageManager.PERMISSION_GRANTED
+                .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED
                 &&
                 ActivityCompat
                         .checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
                         PackageManager.PERMISSION_GRANTED;
     }
-    @SuppressLint("MissingPermission")
-    public void getLocation(){
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        isGpsEnabled = locationManager.isProviderEnabled(locationManager.GPS_PROVIDER);
-        //Fare richiesta dei permessi
-        if(checkPerm()) {
-            if(isGpsEnabled){
-                locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, MIN_TIME_UPDATE, MIN_DISTANCE_UPDATE, (LocationListener) this);
-                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                if(location != null){
-                    updateLatitude();
-                    updateLongitude();
-                }
-            }
-        }
+
+    private void requestPerm(){
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
     }
 
     private void stopTrackGps(){
-
+        geo.setStop();
     }
 
-    private void updateLatitude() {
-        latitude = location.getLatitude();
-    }
-
-    private void updateLongitude() {
-        longitude = location.getLongitude();
-    }
-
-    public static double getLatitude() {
-        return latitude;
-    }
-
-    public static double getLongitude(){
-        return longitude;
+    private startPanic(){
+        
     }
 }
