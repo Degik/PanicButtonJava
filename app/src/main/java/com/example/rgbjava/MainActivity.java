@@ -1,15 +1,18 @@
 package com.example.rgbjava;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.GnssAntennaInfo;
 import android.location.GpsStatus;
@@ -18,6 +21,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 
@@ -33,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     //
     public LocationManager locationManager;
     private Geo geo;
+    //
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private Bitmap bitmapImage;
     //
     public static BackupFile backupFile;
     public static User user;
@@ -130,7 +137,24 @@ public class MainActivity extends AppCompatActivity {
         geo.setStop();
     }
 
-    private startPanic(){
-        
+    private void startPanic(){
+
+    }
+
+    private void startCamera(){
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try{
+            startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
+        } catch(ActivityNotFoundException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            bitmapImage = (Bitmap) data.getExtras().get("data");
+        }
     }
 }
