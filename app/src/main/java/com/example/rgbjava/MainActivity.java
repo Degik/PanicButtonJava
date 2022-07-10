@@ -20,14 +20,23 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 
 import com.google.android.gms.maps.MapView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private Button buttonContactsList;
@@ -40,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     //
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap bitmapImage;
+    private File file;
     //
     public static BackupFile backupFile;
     public static User user;
@@ -75,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
         User user = new User(backupFile.getFirstName(), backupFile.getLastName(), backupFile.getNumberPhone());
         contacts = backupFile.getContactList();
 
+        if(contacts == null){
+            contacts = new ArrayList<Contact>();
+            backupFile.makeBackupContactsList();
+        }
+
         buttonContactsList = (Button) findViewById(R.id.contactsListButton);
         buttonContactsList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         buttonPanic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startPanic();
             }
         });
 
@@ -138,7 +153,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startPanic(){
-
+        startCamera();
+        sendEmail();
     }
 
     private void startCamera(){
@@ -148,6 +164,39 @@ public class MainActivity extends AppCompatActivity {
         } catch(ActivityNotFoundException e){
             e.printStackTrace();
         }
+    }
+
+    private void sendEmail(){
+        ArrayList<String> list = new ArrayList<>();
+        for(Contact c: contacts){
+            list.add(c.getEmail());
+        }
+        String[] arrayEmail = list.toArray(new String[0]);
+        //
+        Intent intentSendEmail = new Intent(Intent.ACTION_SEND);
+        intentSendEmail.putExtra(Intent.EXTRA_EMAIL, arrayEmail);
+        intentSendEmail.putExtra(Intent.EXTRA_SUBJECT, "ho bisogno di aiuto!!");
+        intentSendEmail.setType("image/*");
+        //
+        File myDir = new File(Environment.getExternalStorageDirectory() + "/picture");
+        DateFormat format = new SimpleDateFormat("dd_MM_yyyy_H_mm_ss", Locale.getDefault());
+        Date curDate = new Date();
+        String displayDate = format.format(curDate);
+        String fname = displayDate+ "_picture.jpg";
+        file = new File(myDir,fname);
+        try{
+            boolean fileExist = file.createNewFile();
+            if(fileExist){
+                FileOutputStream outputStream = new FileOutputStream(file);
+                bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                outputStream.close();
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        //
+        intentSendEmail.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        startActivity(Intent.createChooser(intentSendEmail, "Test"));
     }
 
     @Override

@@ -62,7 +62,7 @@ public class BackupFile {
 
     public ArrayList<Contact> getContactList(){
         sharedPreferences = context.getSharedPreferences(CONTACTS, Context.MODE_PRIVATE);
-        String jsonString = sharedPreferences.getString(CONTACTS, "");
+        String jsonString = sharedPreferences.getString(CONTACTS, null);
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<Contact>>(){}.getType();
         ArrayList<Contact> list = gson.fromJson(jsonString, type);
