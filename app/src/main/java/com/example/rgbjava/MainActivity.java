@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void startCamera(){
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePicture.putExtra("android.intent.extra.quickCapture", true);
         try{
             startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
         } catch(ActivityNotFoundException e){
@@ -178,23 +179,6 @@ public class MainActivity extends AppCompatActivity {
         intentSendEmail.putExtra(Intent.EXTRA_SUBJECT, "ho bisogno di aiuto!!");
         intentSendEmail.setType("image/*");
         //
-        File myDir = new File(Environment.getExternalStorageDirectory() + "/picture");
-        DateFormat format = new SimpleDateFormat("dd_MM_yyyy_H_mm_ss", Locale.getDefault());
-        Date curDate = new Date();
-        String displayDate = format.format(curDate);
-        String fname = displayDate+ "_picture.jpg";
-        file = new File(myDir,fname);
-        try{
-            boolean fileExist = file.createNewFile();
-            if(fileExist){
-                FileOutputStream outputStream = new FileOutputStream(file);
-                bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                outputStream.close();
-            }
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        //
         intentSendEmail.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
         startActivity(Intent.createChooser(intentSendEmail, "Test"));
     }
@@ -204,6 +188,23 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
             bitmapImage = (Bitmap) data.getExtras().get("data");
+            File myDir = new File(Environment.getExternalStorageDirectory() + "/picture");
+            DateFormat format = new SimpleDateFormat("dd_MM_yyyy_H_mm_ss", Locale.getDefault());
+            Date curDate = new Date();
+            String displayDate = format.format(curDate);
+            String fname = displayDate+ "_picture.jpg";
+            file = new File(myDir,fname);
+            try{
+                boolean fileExist = file.createNewFile();
+                if(fileExist){
+                    FileOutputStream outputStream = new FileOutputStream(file);
+                    bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                    outputStream.flush();
+                    outputStream.close();
+                }
+            } catch (IOException e){
+                e.printStackTrace();
+            }
         }
     }
 }
