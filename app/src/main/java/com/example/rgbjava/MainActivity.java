@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
     private String currentPhotoPath;
     //
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private Bitmap bitmapImage;
     private File file = null;
     //
     public static BackupFile backupFile;
@@ -211,32 +210,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
-            Bundle extras = data.getExtras();
-            bitmapImage = (Bitmap) extras.get("data");
-            /*
-            File myDir = new File(Environment.getExternalStorageDirectory() + "/picture");
-            DateFormat format = new SimpleDateFormat("dd_MM_yyyy_H_mm_ss", Locale.getDefault());
-            Date curDate = new Date();
-            String displayDate = format.format(curDate);
-            String fname = displayDate+ "_picture.jpg";
-            file = new File(myDir,fname);
-            try{
-                boolean fileExist = file.createNewFile();
-                if(fileExist){
-                    FileOutputStream outputStream = new FileOutputStream(file);
-                    bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                    outputStream.flush();
-                    outputStream.close();
-                }
-            } catch (IOException e){
-                e.printStackTrace();
-            }*/
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK && data.getData() != null){
+            Bundle bundle = data.getExtras();
+            Bitmap bitmapImage = (Bitmap) bundle.get("data");
         }
     }
 
     private File createImageFile() throws IOException {
-        String time = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+        String time = new SimpleDateFormat("dd:MM:yyyy_HH:mm:ss").format(new Date());
         String imageFileName = "JPEG_" + time + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName,".jpg", storageDir);
@@ -245,12 +226,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean checkCameraPerm(){
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestCameraPerm(){
         ActivityCompat.requestPermissions(this, new String[]{
-                Manifest.permission.CAMERA}, PERMISSION_ID_CAMERA);
+                Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_ID_CAMERA);
     }
 
     /*
