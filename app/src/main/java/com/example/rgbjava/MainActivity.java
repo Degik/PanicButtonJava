@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     //
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private File file = null;
+    private Uri photoUri;
     //
     public static BackupFile backupFile;
     public static User user;
@@ -119,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         buttonPanic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startPanic();
+                startPanic();
             }
         });
 
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startPanic(){
-        //sendEmail();
+        sendEmail();
     }
 
     private void startIntentPicture(){
@@ -185,13 +186,13 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         if(file != null){
-            Uri photoUri = FileProvider.getUriForFile(this, "com.example.rgbjava.fileprovider", file);
+            photoUri = FileProvider.getUriForFile(this, "com.example.rgbjava.fileprovider", file);
             takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
             startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
         }
     }
 
-    /*private void sendEmail(){
+    private void sendEmail(){
         ArrayList<String> list = new ArrayList<>();
         for(Contact c: contacts){
             list.add(c.getEmail());
@@ -201,11 +202,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intentSendEmail = new Intent(Intent.ACTION_SEND);
         intentSendEmail.putExtra(Intent.EXTRA_EMAIL, arrayEmail);
         intentSendEmail.putExtra(Intent.EXTRA_SUBJECT, "ho bisogno di aiuto!!");
-        intentSendEmail.setType("image/*");
+        intentSendEmail.setType("application/image");
         //
-        intentSendEmail.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        intentSendEmail.putExtra(Intent.EXTRA_STREAM, photoUri);
+        intentSendEmail.putExtra(Intent.EXTRA_TEXT, "La mia posizione è: " + geo.getAddressPos());
         startActivity(Intent.createChooser(intentSendEmail, "Test"));
-    }*/
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
