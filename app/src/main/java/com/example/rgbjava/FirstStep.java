@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class FirstStep extends AppCompatActivity {
@@ -16,6 +17,8 @@ public class FirstStep extends AppCompatActivity {
     private EditText editFirstName;
     private EditText editLastName;
     private EditText editNumberPhone;
+    private EditText editStartTime;
+    private CheckBox checkGpsEnabled;
 
     private Context context = this;
 
@@ -31,12 +34,17 @@ public class FirstStep extends AppCompatActivity {
                 editFirstName = (EditText) findViewById(R.id.textFirstNameStep);
                 editLastName = (EditText) findViewById(R.id.textLastNameFirstStep);
                 editNumberPhone = (EditText) findViewById(R.id.textNumberPhoneFirstStep);
+                editStartTime = (EditText) findViewById(R.id.editTextStartTimerFirstStep);
+                checkGpsEnabled = (CheckBox) findViewById(R.id.checkGpsEnabledFirstStep);
 
                 String firstName = editFirstName.getText().toString();
                 String lastName = editLastName.getText().toString();
                 String numberPhone = editNumberPhone.getText().toString();
+                int startTime = Integer.parseInt(editStartTime.getText().toString());
+                boolean gpsEnabled = checkGpsEnabled.isChecked();
+
                 if(!(emptyString(firstName) || emptyString(lastName) || emptyString(numberPhone))){
-                    MainActivity.backupFile.makeBackupSettings(firstName, lastName, numberPhone);
+                    MainActivity.backupFile.makeBackupSettings(firstName, lastName, numberPhone, startTime, gpsEnabled);
                     openMain();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);

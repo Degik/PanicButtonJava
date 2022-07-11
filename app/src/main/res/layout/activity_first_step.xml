@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".FirstStep">
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="35dp"
+        android:text="Tempo inizio panico"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textNumberPhoneFirstStep" />
+
     <EditText
         android:id="@+id/textLastNameFirstStep"
         android:layout_width="wrap_content"
@@ -24,8 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="101dp"
-        android:layout_marginLeft="101dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="35dp"
         android:text="Numero"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,14 +69,31 @@
         android:id="@+id/saveButton"
         android:layout_width="135dp"
         android:layout_height="73dp"
-        android:layout_marginStart="138dp"
-        android:layout_marginLeft="138dp"
-        android:layout_marginTop="73dp"
-        android:layout_marginBottom="250dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginBottom="68dp"
         android:text="Salva"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextStartTimerFirstStep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textNumberPhoneFirstStep" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <CheckBox
+        android:id="@+id/checkGpsEnabledFirstStep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="35dp"
+        android:text="Gps abilitato"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextStartTimerFirstStep" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

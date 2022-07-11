@@ -30,13 +30,15 @@ public class BackupFile {
         editor.apply();
     }
 
-    public void makeBackupSettings(String firstName, String lastName, String numberPhone){
+    public void makeBackupSettings(String firstName, String lastName, String numberPhone, int startTime, boolean gpsEnabled){
         SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("firstName", firstName);
         editor.putString("lastName", lastName);
         editor.putString("numberPhone", numberPhone);
         editor.putBoolean("firstStart", false);
+        editor.putInt("startTime", startTime);
+        editor.putBoolean("gpsEnabled", gpsEnabled);
         editor.commit();
     }
 
@@ -52,12 +54,22 @@ public class BackupFile {
 
     public String getNumberPhone(){
         SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
-        return settings.getString("lastName", "DEFAULT");
+        return settings.getString("numberPhone", "DEFAULT");
     }
 
     public boolean getFirstStart(){
         SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
         return settings.getBoolean("firstStart", true);
+    }
+
+    public int getStartTime(){
+        SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
+        return settings.getInt("startTime", 2000);
+    }
+
+    public boolean getGpsEnabled(){
+        SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
+        return settings.getBoolean("gpsEnabled", false);
     }
 
     public ArrayList<Contact> getContactList(){

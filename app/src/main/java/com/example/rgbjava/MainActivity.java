@@ -1,8 +1,6 @@
 package com.example.rgbjava;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -11,38 +9,25 @@ import androidx.core.content.FileProvider;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Criteria;
-import android.location.GnssAntennaInfo;
-import android.location.GpsStatus;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.MapView;
-
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private Button buttonContactsList;
@@ -51,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Button settingsButton;
     private int PERMISSION_ID = 44;
     private int PERMISSION_ID_CAMERA = 45;
+    private final Handler handler = new Handler();
     //
     public LocationManager locationManager;
     private Geo geo;
@@ -65,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Contact> contacts;
 
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint({"MissingPermission", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,18 +66,20 @@ public class MainActivity extends AppCompatActivity {
             backupFile.makeBackupContactsList();
             openFirstStep();
         } else {
-            locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-            if(checkPerm()){
-                geo = new Geo(this, locationManager);
-                Thread threadGps = new Thread(geo);
-                threadGps.setName("GeoTracker");
-                threadGps.start();
-            } else {
-                requestPerm();
+            if(backupFile.getGpsEnabled()){
+                locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+                if(checkPerm()){
+                    geo = new Geo(this, locationManager);
+                    Thread threadGps = new Thread(geo);
+                    threadGps.setName("GeoTracker");
+                    threadGps.start();
+                } else {
+                    requestPerm();
+                }
             }
         }
 
-        User user = new User(backupFile.getFirstName(), backupFile.getLastName(), backupFile.getNumberPhone());
+        User user = new User(backupFile.getFirstName(), backupFile.getLastName(), backupFile.getNumberPhone(), backupFile.getStartTime(), backupFile.getGpsEnabled());
         contacts = backupFile.getContactList();
 
         if(contacts == null){
@@ -116,11 +104,31 @@ public class MainActivity extends AppCompatActivity {
         });
 
         buttonPanic = (Button) findViewById(R.id.panicButton);
-        buttonPanic.setEnabled(false);
-        buttonPanic.setOnClickListener(new View.OnClickListener() {
+        //buttonPanic.setEnabled(false);
+        /*buttonPanic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startPanic();
+            }
+        });*/
+
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                startPanic();
+                //Toast.makeText(MainActivity.this, "Comunicazione inviata", Toast.LENGTH_SHORT).show();
+            }
+        };
+        buttonPanic.setEnabled(false);
+        buttonPanic.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    handler.postDelayed(runnable, user.getStartTime());
+                } else {
+                    handler.removeCallbacks(runnable);
+                }
+                return true;
             }
         });
 
@@ -205,7 +213,9 @@ public class MainActivity extends AppCompatActivity {
         intentSendEmail.setType("application/image");
         //
         intentSendEmail.putExtra(Intent.EXTRA_STREAM, photoUri);
-        intentSendEmail.putExtra(Intent.EXTRA_TEXT, "La mia posizione è: " + geo.getAddressPos());
+        if(user.getGpsEnabled()){
+            intentSendEmail.putExtra(Intent.EXTRA_TEXT, "La mia posizione è: " + geo.getAddressPos());
+        }
         startActivity(Intent.createChooser(intentSendEmail, "Test"));
     }
 
@@ -235,40 +245,4 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_ID_CAMERA);
     }
-
-    /*
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        if(requestCode == PERMISSION_ID){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getApplicationContext(), "Permesso consentito", Toast.LENGTH_SHORT).show();
-
-            } else {
-                Toast.makeText(getApplicationContext(), "Permesso negato", Toast.LENGTH_SHORT).show();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                            != PackageManager.PERMISSION_GRANTED) {
-                        showMessageOKCancel("Devi consentirmi di accedere alla tua fotocamera",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                            requestCameraPerm();
-                                        }
-                                    }
-                                });
-                    }
-                }
-            }
-        }
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(MainActivity.this)
-                .setMessage(message)
-                .setPositiveButton("Acconsenti", okListener)
-                .setNegativeButton("Nega", null)
-                .create()
-                .show();
-    }*/
 }
