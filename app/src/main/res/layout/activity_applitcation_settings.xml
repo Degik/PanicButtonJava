@@ -117,7 +117,7 @@
         app:layout_constraintTop_toBottomOf="@+id/TextLastNameSettings" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/saveSettings"
         android:layout_width="130dp"
         android:layout_height="59dp"
         android:layout_marginStart="140dp"

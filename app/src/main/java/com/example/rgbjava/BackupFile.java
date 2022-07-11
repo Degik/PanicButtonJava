@@ -30,7 +30,7 @@ public class BackupFile {
         editor.apply();
     }
 
-    public void makeBackupSettings(String firstName, String lastName, String numberPhone, int startTime, boolean gpsEnabled){
+    public void makeBackupSettings(String firstName, String lastName, String numberPhone, int startTime, boolean gpsEnabled, boolean cameraEnabled, boolean recordingEnabled){
         SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("firstName", firstName);
@@ -39,6 +39,8 @@ public class BackupFile {
         editor.putBoolean("firstStart", false);
         editor.putInt("startTime", startTime);
         editor.putBoolean("gpsEnabled", gpsEnabled);
+        editor.putBoolean("cameraEnabled", cameraEnabled);
+        editor.putBoolean("recordingEnabled", recordingEnabled);
         editor.commit();
     }
 
@@ -70,6 +72,16 @@ public class BackupFile {
     public boolean getGpsEnabled(){
         SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
         return settings.getBoolean("gpsEnabled", false);
+    }
+
+    public boolean getCameraEnabled(){
+        SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
+        return settings.getBoolean("cameraEnabled", false);
+    }
+
+    public boolean getRecordingEnabled(){
+        SharedPreferences settings = context.getSharedPreferences(SETTINGS, context.MODE_PRIVATE);
+        return settings.getBoolean("recordingEnabled", false);
     }
 
     public ArrayList<Contact> getContactList(){

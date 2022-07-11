@@ -6,6 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".FirstStep">
 
+    <CheckBox
+        android:id="@+id/checkRecordingEnabledFirstStep"
+        android:layout_width="212dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="99dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="27dp"
+        android:text="Registrazione abilitata"
+        app:layout_constraintBottom_toTopOf="@+id/saveButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <CheckBox
+        android:id="@+id/checkCameraEnabledFirstStep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="32dp"
+        android:text="Camera abilitata"
+        app:layout_constraintStart_toEndOf="@+id/checkGpsEnabledFirstStep"
+        app:layout_constraintTop_toBottomOf="@+id/editTextStartTimerFirstStep" />
+
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
@@ -70,7 +92,7 @@
         android:layout_width="135dp"
         android:layout_height="73dp"
         android:layout_marginStart="136dp"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="56dp"
         android:text="Salva"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -90,8 +112,8 @@
         android:id="@+id/checkGpsEnabledFirstStep"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="32dp"
         android:text="Gps abilitato"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextStartTimerFirstStep" />

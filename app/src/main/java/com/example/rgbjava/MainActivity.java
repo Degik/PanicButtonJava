@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        User user = new User(backupFile.getFirstName(), backupFile.getLastName(), backupFile.getNumberPhone(), backupFile.getStartTime(), backupFile.getGpsEnabled());
+        User user = new User(backupFile.getFirstName(), backupFile.getLastName(), backupFile.getNumberPhone(), backupFile.getStartTime(), backupFile.getGpsEnabled(), backupFile.getCameraEnabled(), backupFile.getRecordingEnabled());
         contacts = backupFile.getContactList();
 
         if(contacts == null){
@@ -104,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         buttonPanic = (Button) findViewById(R.id.panicButton);
+        if(contacts.isEmpty()){
+            buttonPanic.setEnabled(false);
+        }
         //buttonPanic.setEnabled(false);
         /*buttonPanic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(MainActivity.this, "Comunicazione inviata", Toast.LENGTH_SHORT).show();
             }
         };
-        buttonPanic.setEnabled(false);
         buttonPanic.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -133,17 +135,23 @@ public class MainActivity extends AppCompatActivity {
         });
 
         takePhotoButton = (Button) findViewById(R.id.buttonPhoto);
-        takePhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(checkCameraPerm()){
-                    startIntentPicture();
-                    buttonPanic.setEnabled(true);
-                } else {
-                    requestCameraPerm();
+        if(!user.isCameraEnabled()){
+            takePhotoButton.setVisibility(View.GONE);
+            takePhotoButton.setEnabled(false);
+        } else {
+            buttonPanic.setEnabled(false);
+            takePhotoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(checkCameraPerm()){
+                        startIntentPicture();
+                        buttonPanic.setEnabled(true);
+                    } else {
+                        requestCameraPerm();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
 
@@ -212,8 +220,10 @@ public class MainActivity extends AppCompatActivity {
         intentSendEmail.putExtra(Intent.EXTRA_SUBJECT, "ho bisogno di aiuto!!");
         intentSendEmail.setType("application/image");
         //
-        intentSendEmail.putExtra(Intent.EXTRA_STREAM, photoUri);
-        if(user.getGpsEnabled()){
+        if(backupFile.getCameraEnabled()){
+            intentSendEmail.putExtra(Intent.EXTRA_STREAM, photoUri);
+        }
+        if(backupFile.getGpsEnabled()){
             intentSendEmail.putExtra(Intent.EXTRA_TEXT, "La mia posizione è: " + geo.getAddressPos());
         }
         startActivity(Intent.createChooser(intentSendEmail, "Test"));

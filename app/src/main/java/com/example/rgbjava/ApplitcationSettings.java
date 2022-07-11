@@ -1,11 +1,16 @@
 package com.example.rgbjava;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class ApplitcationSettings extends AppCompatActivity {
     private Button buttonSaveSettings;
@@ -16,6 +21,7 @@ public class ApplitcationSettings extends AppCompatActivity {
     private CheckBox checkGpsEnabled;
     private CheckBox checkCameraEnabled;
     private CheckBox checkRecordingEnabled;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,5 +41,44 @@ public class ApplitcationSettings extends AppCompatActivity {
         editNumberPhone.setText(MainActivity.backupFile.getNumberPhone());
         editStartTimer.setText(Integer.toString(MainActivity.backupFile.getStartTime()));
         checkGpsEnabled.setChecked(MainActivity.backupFile.getGpsEnabled());
+        checkCameraEnabled.setChecked(MainActivity.backupFile.getCameraEnabled());
+        checkRecordingEnabled.setChecked(MainActivity.backupFile.getRecordingEnabled());
+
+        buttonSaveSettings = (Button) findViewById(R.id.saveSettings);
+        buttonSaveSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String firstName = editFirstName.getText().toString();
+                String lastName = editLastName.getText().toString();
+                String numberPhone = editNumberPhone.getText().toString();
+                int startTime = Integer.parseInt(editStartTimer.getText().toString());
+                boolean gpsEnabled = checkGpsEnabled.isChecked();
+                boolean cameraEnabled = checkCameraEnabled.isChecked();
+                boolean recordingEnabled = checkRecordingEnabled.isChecked();
+
+                if(!(emptyString(firstName) || emptyString(lastName) || emptyString(numberPhone))){
+                    MainActivity.backupFile.makeBackupSettings(firstName, lastName, numberPhone, startTime, gpsEnabled, cameraEnabled, recordingEnabled);
+                    Toast.makeText(ApplitcationSettings.this, "Preferenze salvate", Toast.LENGTH_LONG).show();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("Attenzione").setTitle("Errore");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+            }
+        });
+    }
+
+    private boolean emptyString(String s){
+        if(s.equals("")){
+            return true;
+        }
+        return false;
     }
 }

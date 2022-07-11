@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ContactsList extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private Button buttonAdd;
@@ -62,6 +63,7 @@ public class ContactsList extends AppCompatActivity implements AdapterView.OnIte
                             MainActivity.contacts.remove(contact);
                             MainActivity.backupFile.makeBackupContactsList();
                             contactsAdapter.notifyDataSetChanged();
+                            Toast.makeText(ContactsList.this, "Contatto eliminato", Toast.LENGTH_LONG).show();
                         }
                     });
                     builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

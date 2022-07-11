@@ -19,6 +19,8 @@ public class FirstStep extends AppCompatActivity {
     private EditText editNumberPhone;
     private EditText editStartTime;
     private CheckBox checkGpsEnabled;
+    private CheckBox checkCameraEnabled;
+    private CheckBox checkRecordingEnabled;
 
     private Context context = this;
 
@@ -36,15 +38,19 @@ public class FirstStep extends AppCompatActivity {
                 editNumberPhone = (EditText) findViewById(R.id.textNumberPhoneFirstStep);
                 editStartTime = (EditText) findViewById(R.id.editTextStartTimerFirstStep);
                 checkGpsEnabled = (CheckBox) findViewById(R.id.checkGpsEnabledFirstStep);
+                checkCameraEnabled = (CheckBox) findViewById(R.id.checkCameraEnabledFirstStep);
+                checkRecordingEnabled = (CheckBox) findViewById(R.id.checkRecordingEnabledFirstStep);
 
                 String firstName = editFirstName.getText().toString();
                 String lastName = editLastName.getText().toString();
                 String numberPhone = editNumberPhone.getText().toString();
                 int startTime = Integer.parseInt(editStartTime.getText().toString());
                 boolean gpsEnabled = checkGpsEnabled.isChecked();
+                boolean cameraEnabled = checkCameraEnabled.isChecked();
+                boolean recordingEnabled = checkCameraEnabled.isChecked();
 
                 if(!(emptyString(firstName) || emptyString(lastName) || emptyString(numberPhone))){
-                    MainActivity.backupFile.makeBackupSettings(firstName, lastName, numberPhone, startTime, gpsEnabled);
+                    MainActivity.backupFile.makeBackupSettings(firstName, lastName, numberPhone, startTime, gpsEnabled, cameraEnabled, recordingEnabled);
                     openMain();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
