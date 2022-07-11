@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.icu.text.AlphabeticIndex;
 import android.location.LocationManager;
@@ -25,11 +26,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private Button buttonContactsList;
@@ -220,17 +224,18 @@ public class MainActivity extends AppCompatActivity {
     private void startPanic(){
         if(checkAudioPerm()){
             try {
-                createRecordFile();
+                fileRecord = createRecordFile();
             } catch (IOException e){
                 e.printStackTrace();
             }
             startRecord(currentRecordPath);
             stopRecord(5);
+            recordUri = FileProvider.getUriForFile(this, "com.example.rgbjava.fileprovider", fileRecord);
             Toast.makeText(MainActivity.this, "Registrazione fermata", Toast.LENGTH_LONG).show();
         } else {
             requestAudioPerm();
         }
-        //sendEmail();
+        sendEmail();
     }
 
     private void startIntentPicture(){
@@ -254,18 +259,30 @@ public class MainActivity extends AppCompatActivity {
         }
         String[] arrayEmail = list.toArray(new String[0]);
         //
-        Intent intentSendEmail = new Intent(Intent.ACTION_SEND);
+        Intent selectorIntent = new Intent(Intent.ACTION_SENDTO);
+        selectorIntent.setData(Uri.parse("mailto:"));
+        Intent intentSendEmail = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        //
+        ArrayList<Uri> urisList = new ArrayList<>();
+        if(backupFile.getCameraEnabled()){
+            urisList.add(photoUri);
+            //intentSendEmail.putExtra(Intent.EXTRA_STREAM, photoUri);
+        }
+        if(backupFile.getRecordingEnabled()){
+            urisList.add(recordUri);
+        }
+        //
         intentSendEmail.putExtra(Intent.EXTRA_EMAIL, arrayEmail);
         intentSendEmail.putExtra(Intent.EXTRA_SUBJECT, "ho bisogno di aiuto!!");
-        intentSendEmail.setType("application/image");
+        //intentSendEmail.setType("application/image");
+        intentSendEmail.putParcelableArrayListExtra(Intent.EXTRA_STREAM, urisList);
+        intentSendEmail.setSelector(selectorIntent);
         //
-        if(backupFile.getCameraEnabled()){
-            intentSendEmail.putExtra(Intent.EXTRA_STREAM, photoUri);
-        }
         if(backupFile.getGpsEnabled()){
             intentSendEmail.putExtra(Intent.EXTRA_TEXT, "La mia posizione è: " + geo.getAddressPos());
         }
-        startActivity(Intent.createChooser(intentSendEmail, "Test"));
+
+        startActivity(Intent.createChooser(intentSendEmail, "Segnala le tue informazioni"));
     }
 
     @Override
@@ -288,12 +305,12 @@ public class MainActivity extends AppCompatActivity {
 
     private File createRecordFile() throws IOException {
         String time = new SimpleDateFormat("dd:MM:yyyy_HH:mm:ss").format(new Date());
-        String recordFileName = "MPEG_4_" + time + "_";
+        String recordFileName = "REC_3GP_" + time + "_";
         File storageDir = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
             storageDir = getExternalFilesDir(Environment.DIRECTORY_RECORDINGS);
         }
-        File record = File.createTempFile(recordFileName,".mp4", storageDir);
+        File record = File.createTempFile(recordFileName,".3gp", storageDir);
         currentRecordPath = record.getAbsolutePath();
         return record;
     }
@@ -302,8 +319,8 @@ public class MainActivity extends AppCompatActivity {
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFile(fileName);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         try {
             recorder.prepare();
         } catch(Exception e){
