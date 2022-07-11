@@ -12,7 +12,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.icu.text.AlphabeticIndex;
 import android.location.LocationManager;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,15 +38,21 @@ public class MainActivity extends AppCompatActivity {
     private Button settingsButton;
     private int PERMISSION_ID = 44;
     private int PERMISSION_ID_CAMERA = 45;
+    private int PERMISSION_ID_AUDIO = 46;
     private final Handler handler = new Handler();
     //
     public LocationManager locationManager;
     private Geo geo;
     private String currentPhotoPath;
+    private String currentRecordPath;
     //
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private File file = null;
+    private File fileImage = null;
     private Uri photoUri;
+    //
+    private MediaRecorder recorder;
+    private File fileRecord = null;
+    private Uri recordUri;
     //
     public static BackupFile backupFile;
     public static User user;
@@ -154,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     public void opencContactsList() { // Per aprire la lista dei contatti
         Intent intentContactsList = new Intent(this, ContactsList.class);
         startActivity(intentContactsList);
@@ -186,23 +193,55 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
     }
 
+    private boolean checkCameraPerm(){
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestCameraPerm(){
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_ID_CAMERA);
+    }
+
+    private boolean checkAudioPerm(){
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestAudioPerm(){
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.RECORD_AUDIO},
+                PERMISSION_ID_AUDIO
+        );
+    }
+
     private void stopTrackGps(){
         geo.setStop();
     }
 
     private void startPanic(){
-        sendEmail();
+        if(checkAudioPerm()){
+            try {
+                createRecordFile();
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+            startRecord(currentRecordPath);
+            stopRecord(5);
+            Toast.makeText(MainActivity.this, "Registrazione fermata", Toast.LENGTH_LONG).show();
+        } else {
+            requestAudioPerm();
+        }
+        //sendEmail();
     }
 
     private void startIntentPicture(){
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try{
-            file = createImageFile();
+            fileImage = createImageFile();
         } catch (IOException e){
             e.printStackTrace();
         }
-        if(file != null){
-            photoUri = FileProvider.getUriForFile(this, "com.example.rgbjava.fileprovider", file);
+        if(fileImage != null){
+            photoUri = FileProvider.getUriForFile(this, "com.example.rgbjava.fileprovider", fileImage);
             takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
             startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
         }
@@ -247,12 +286,45 @@ public class MainActivity extends AppCompatActivity {
         return image;
     }
 
-    private boolean checkCameraPerm(){
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    private File createRecordFile() throws IOException {
+        String time = new SimpleDateFormat("dd:MM:yyyy_HH:mm:ss").format(new Date());
+        String recordFileName = "MPEG_4_" + time + "_";
+        File storageDir = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            storageDir = getExternalFilesDir(Environment.DIRECTORY_RECORDINGS);
+        }
+        File record = File.createTempFile(recordFileName,".mp4", storageDir);
+        currentRecordPath = record.getAbsolutePath();
+        return record;
     }
 
-    private void requestCameraPerm(){
-        ActivityCompat.requestPermissions(this, new String[]{
-                Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_ID_CAMERA);
+    private void startRecord(String fileName){
+        recorder = new MediaRecorder();
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFile(fileName);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        try {
+            recorder.prepare();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        recorder.start();
+    }
+
+    private void stopRecord(int time){
+        sleep(time);
+        recorder.stop();
+        recorder.release();
+    }
+
+    private static void sleep(int time){
+        try {
+            for(int i = 0; i < time; i++){
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
     }
 }
