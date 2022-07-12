@@ -10,13 +10,14 @@
         <entry key="app/src/main/res/layout/activity_contacts_list.xml" value="0.3691421508789063" />
         <entry key="app/src/main/res/layout/activity_first_step.xml" value="0.3439651489257813" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.26957076805225316" />
+        <entry key="app/src/main/res/layout/activity_timer.xml" value="0.21927541097005204" />
         <entry key="app/src/main/res/layout/contactslist.xml" value="0.24501479881397187" />
         <entry key="app/src/main/res/layout/layout_adapter_contacts_list.xml" value="0.39438598385456247" />
         <entry key="app/src/main/res/xml/file_paths.xml" value="0.15020263424518743" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

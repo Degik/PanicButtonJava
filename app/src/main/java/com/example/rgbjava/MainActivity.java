@@ -119,30 +119,11 @@ public class MainActivity extends AppCompatActivity {
         if(contacts.isEmpty()){
             buttonPanic.setEnabled(false);
         }
-        //buttonPanic.setEnabled(false);
-        /*buttonPanic.setOnClickListener(new View.OnClickListener() {
+
+        buttonPanic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startPanic();
-            }
-        });*/
-
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                startPanic();
-                //Toast.makeText(MainActivity.this, "Comunicazione inviata", Toast.LENGTH_SHORT).show();
-            }
-        };
-        buttonPanic.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    handler.postDelayed(runnable, user.getStartTime());
-                } else {
-                    handler.removeCallbacks(runnable);
-                }
-                return true;
+                startIntentTimer();
             }
         });
 
@@ -221,21 +202,28 @@ public class MainActivity extends AppCompatActivity {
         geo.setStop();
     }
 
-    private void startPanic(){
-        if(checkAudioPerm()){
-            try {
-                fileRecord = createRecordFile();
-            } catch (IOException e){
-                e.printStackTrace();
+    public void startPanic(){
+        if(backupFile.getRecordingEnabled()){
+            if(checkAudioPerm()){
+                try {
+                    fileRecord = createRecordFile();
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+                startRecord(currentRecordPath);
+                stopRecord(5);
+                recordUri = FileProvider.getUriForFile(this, "com.example.rgbjava.fileprovider", fileRecord);
+                Toast.makeText(MainActivity.this, "Registrazione fermata", Toast.LENGTH_LONG).show();
+            } else {
+                requestAudioPerm();
             }
-            startRecord(currentRecordPath);
-            stopRecord(5);
-            recordUri = FileProvider.getUriForFile(this, "com.example.rgbjava.fileprovider", fileRecord);
-            Toast.makeText(MainActivity.this, "Registrazione fermata", Toast.LENGTH_LONG).show();
-        } else {
-            requestAudioPerm();
         }
         sendEmail();
+    }
+
+    private void startIntentTimer(){
+        Intent intentTimer = new Intent(this, TimerActivity.class);
+        startActivity(intentTimer);
     }
 
     private void startIntentPicture(){

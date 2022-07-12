@@ -4,6 +4,6 @@
         name="my_images"
         path="Pictures" />
     <external-files-path
-        name="my_recording"
-        path="Recording"/>
+        name="my_recordings"
+        path="Recordings"/>
 </paths>
