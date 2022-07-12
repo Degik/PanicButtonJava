@@ -40,6 +40,8 @@ public class TimerActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                textViewTimer.setVisibility(View.GONE);
+                buttonStop.setVisibility(View.GONE);
                 panicEnabled = true;
                 startMain();
             }

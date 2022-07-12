@@ -273,8 +273,11 @@ public class MainActivity extends AppCompatActivity {
         if(backupFile.getGpsEnabled()){
             intentSendEmail.putExtra(Intent.EXTRA_TEXT, "La mia posizione è: " + /*geo.getAddressPos()*/ TimerActivity.getPosAddress());
         }
-
-        startActivity(Intent.createChooser(intentSendEmail, "Segnala le tue informazioni"));
+        try{
+            startActivity(Intent.createChooser(intentSendEmail, "Segnala le tue informazioni"));
+        }  catch (Exception e){
+            // Gestico per evitare interruzioni
+        }
     }
 
     @Override
