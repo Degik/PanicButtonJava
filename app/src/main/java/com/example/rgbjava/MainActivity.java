@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     public static User user;
     public static ArrayList<Contact> contacts;
 
-
     @SuppressLint({"MissingPermission", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
 
         backupFile = new BackupFile(getApplicationContext());
         boolean firstStart = backupFile.getFirstStart();
+
+        if(TimerActivity.getPanicEnabled()){
+            startPanic();
+            Toast.makeText(MainActivity.this, "Comunicazione inviata", Toast.LENGTH_LONG).show();
+        }
 
         // Inserire form per il primo login
         if (firstStart) {
@@ -91,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        User user = new User(backupFile.getFirstName(), backupFile.getLastName(), backupFile.getNumberPhone(), backupFile.getStartTime(), backupFile.getGpsEnabled(), backupFile.getCameraEnabled(), backupFile.getRecordingEnabled());
+        user = new User(backupFile.getFirstName(), backupFile.getLastName(), backupFile.getNumberPhone(), backupFile.getStartTime(), backupFile.getGpsEnabled(), backupFile.getCameraEnabled(), backupFile.getRecordingEnabled());
         contacts = backupFile.getContactList();
 
         if(contacts == null){
@@ -202,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         geo.setStop();
     }
 
-    public void startPanic(){
+    private void startPanic(){
         if(backupFile.getRecordingEnabled()){
             if(checkAudioPerm()){
                 try {
@@ -213,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 startRecord(currentRecordPath);
                 stopRecord(5);
                 recordUri = FileProvider.getUriForFile(this, "com.example.rgbjava.fileprovider", fileRecord);
-                Toast.makeText(MainActivity.this, "Registrazione fermata", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Registrazione fermata", Toast.LENGTH_SHORT).show();
             } else {
                 requestAudioPerm();
             }

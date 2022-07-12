@@ -2,6 +2,8 @@ package com.example.rgbjava;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -15,6 +17,7 @@ public class TimerActivity extends AppCompatActivity {
     private TextView textViewTimer;
     private boolean timerRunning;
     private long timeLeft;
+    public static boolean panicEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +25,7 @@ public class TimerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timer);
 
         textViewTimer = (TextView) findViewById(R.id.editTextTimerLabel);
-        countDownTimer = new CountDownTimer(30000, 1000) {
+        countDownTimer = new CountDownTimer(MainActivity.backupFile.getStartTime(), 1000) {
             @Override
             public void onTick(long l) {
                 textViewTimer.setText("" + l / 1000);
@@ -30,7 +33,8 @@ public class TimerActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-
+                panicEnabled = true;
+                startMain();
             }
         };
         countDownTimer.start();
@@ -40,8 +44,17 @@ public class TimerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 countDownTimer.cancel();
-                MainActivity
+                startMain();
             }
         });
+    }
+
+    private void startMain(){
+        Intent intentMain = new Intent(this, MainActivity.class);
+        startActivity(intentMain);
+    }
+
+    public static boolean getPanicEnabled(){
+        return panicEnabled;
     }
 }
