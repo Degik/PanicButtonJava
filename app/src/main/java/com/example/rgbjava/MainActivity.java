@@ -11,9 +11,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.icu.text.AlphabeticIndex;
 import android.location.LocationManager;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -21,19 +19,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private Button buttonContactsList;
@@ -44,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private int PERMISSION_ID_CAMERA = 45;
     private int PERMISSION_ID_AUDIO = 46;
     private final Handler handler = new Handler();
+    private Thread threadGps;
     //
     public LocationManager locationManager;
     private Geo geo;
@@ -72,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
         boolean firstStart = backupFile.getFirstStart();
 
         if(TimerActivity.getPanicEnabled()){
+            TimerActivity.setPanicDisabled();
             startPanic();
-            Toast.makeText(MainActivity.this, "Comunicazione inviata", Toast.LENGTH_LONG).show();
         }
 
         // Inserire form per il primo login
@@ -85,10 +81,12 @@ public class MainActivity extends AppCompatActivity {
             if(backupFile.getGpsEnabled()){
                 locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
                 if(checkPerm()){
-                    geo = new Geo(this, locationManager);
-                    Thread threadGps = new Thread(geo);
-                    threadGps.setName("GeoTracker");
-                    threadGps.start();
+                    if(!(Geo.running.get())){
+                        geo = new Geo(this, locationManager);
+                        threadGps = new Thread(geo);
+                        threadGps.setName("GeoTracker");
+                        threadGps.start();
+                    }
                 } else {
                     requestPerm();
                 }
@@ -222,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
                 requestAudioPerm();
             }
         }
+        sleep(1);
         sendEmail();
     }
 
@@ -239,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if(fileImage != null){
             photoUri = FileProvider.getUriForFile(this, "com.example.rgbjava.fileprovider", fileImage);
+            TimerActivity.setFilePhoto(photoUri);
             takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
             startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
         }
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
         //
         ArrayList<Uri> urisList = new ArrayList<>();
         if(backupFile.getCameraEnabled()){
-            urisList.add(photoUri);
+            urisList.add(TimerActivity.getUriFilePhoto());
             //intentSendEmail.putExtra(Intent.EXTRA_STREAM, photoUri);
         }
         if(backupFile.getRecordingEnabled()){
@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
         intentSendEmail.setSelector(selectorIntent);
         //
         if(backupFile.getGpsEnabled()){
-            intentSendEmail.putExtra(Intent.EXTRA_TEXT, "La mia posizione è: " + geo.getAddressPos());
+            intentSendEmail.putExtra(Intent.EXTRA_TEXT, "La mia posizione è: " + /*geo.getAddressPos()*/ TimerActivity.getPosAddress());
         }
 
         startActivity(Intent.createChooser(intentSendEmail, "Segnala le tue informazioni"));

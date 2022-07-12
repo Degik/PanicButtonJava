@@ -2,14 +2,18 @@ package com.example.rgbjava;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.io.File;
 
 public class TimerActivity extends AppCompatActivity {
     private CountDownTimer countDownTimer;
@@ -18,6 +22,9 @@ public class TimerActivity extends AppCompatActivity {
     private boolean timerRunning;
     private long timeLeft;
     public static boolean panicEnabled = false;
+    public static String posAddress;
+    public static Uri uriFilePhoto;
+    public static Activity activityMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,5 +63,29 @@ public class TimerActivity extends AppCompatActivity {
 
     public static boolean getPanicEnabled(){
         return panicEnabled;
+    }
+
+    public static void setPanicDisabled(){
+        panicEnabled = false;
+    }
+
+    public static void setPosAddress(String pos){
+        posAddress = pos;
+    }
+
+    public static String getPosAddress(){
+        return posAddress;
+    }
+
+    public static void setFilePhoto(Uri file){
+        uriFilePhoto = file;
+    }
+
+    public static Uri getUriFilePhoto(){
+        return uriFilePhoto;
+    }
+
+    public static void setActivity(Activity activity){
+        activityMain = activity;
     }
 }

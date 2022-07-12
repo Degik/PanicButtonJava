@@ -37,7 +37,7 @@ public class Geo  implements LocationListener, Runnable {
     private static final long MIN_DISTANCE_UPDATE = 10;
     private static double longitude;
     private static double latitude;
-    private final AtomicBoolean running = new AtomicBoolean(false);
+    public static final AtomicBoolean running = new AtomicBoolean(false);
 
     public Geo(Context context, LocationManager locationManager){
         super();
@@ -54,9 +54,11 @@ public class Geo  implements LocationListener, Runnable {
             try {
                 List<Address> listAddress = gc.getFromLocation(latitude, longitude, 1);
                 addressPos = listAddress.get(0).getAddressLine(0);
+                TimerActivity.setPosAddress(addressPos);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            System.out.println( Thread.currentThread().getName() + ": Ho finito!");
             sleep(5);
         }
         Looper.loop();
