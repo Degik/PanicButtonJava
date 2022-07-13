@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Thread threadGps;
     //
     public LocationManager locationManager;
-    private Geo geo;
+    private static Geo geo;
     private String currentPhotoPath;
     private String currentRecordPath;
     //
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void stopTrackGps(){
+    public static void stopTrackGps(){
         geo.setStop();
     }
 

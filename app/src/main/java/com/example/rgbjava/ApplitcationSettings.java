@@ -62,6 +62,9 @@ public class ApplitcationSettings extends AppCompatActivity {
 
                 if(!(emptyString(firstName) || emptyString(lastName) || emptyString(numberPhone))){
                     MainActivity.backupFile.makeBackupSettings(firstName, lastName, numberPhone, startTime, gpsEnabled, cameraEnabled, recordingEnabled, recordingTime);
+                    if(!gpsEnabled){
+                        MainActivity.stopTrackGps();
+                    }
                     Toast.makeText(ApplitcationSettings.this, "Preferenze salvate", Toast.LENGTH_LONG).show();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
