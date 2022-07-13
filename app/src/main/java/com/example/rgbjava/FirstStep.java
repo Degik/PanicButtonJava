@@ -47,7 +47,7 @@ public class FirstStep extends AppCompatActivity {
                 int startTime = Integer.parseInt(editStartTime.getText().toString());
                 boolean gpsEnabled = checkGpsEnabled.isChecked();
                 boolean cameraEnabled = checkCameraEnabled.isChecked();
-                boolean recordingEnabled = checkCameraEnabled.isChecked();
+                boolean recordingEnabled = checkRecordingEnabled.isChecked();
 
                 if(!(emptyString(firstName) || emptyString(lastName) || emptyString(numberPhone))){
                     MainActivity.backupFile.makeBackupSettings(firstName, lastName, numberPhone, startTime, gpsEnabled, cameraEnabled, recordingEnabled, 5);

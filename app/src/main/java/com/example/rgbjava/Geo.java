@@ -99,18 +99,6 @@ public class Geo  implements LocationListener, Runnable {
         longitude = location.getLongitude();
     }
 
-    public static double getLatitude() {
-        return latitude;
-    }
-
-    public static double getLongitude(){
-        return longitude;
-    }
-
-    public String getAddressPos(){
-        return addressPos;
-    }
-
     public synchronized void setStop(){
         running.set(false);
     }
