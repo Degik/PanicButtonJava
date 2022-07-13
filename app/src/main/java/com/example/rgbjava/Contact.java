@@ -44,26 +44,6 @@ public class Contact {
         return favorite;
     }
 
-    public void setFirstName(String firstName){
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName){
-        this.lastName = lastName;
-    }
-
-    public void setNumberTel(String numberTel){
-        this.numberTel = numberTel;
-    }
-
-    public void setEmail(String email){
-        this.email = email;
-    }
-
-    public void setFavorite(boolean favorite){
-        this.favorite = favorite;
-    }
-
     @Override
     public String toString(){
         String s  = "Nome:  " + firstName + " Cognome: " + lastName + " Telefono: " + numberTel + "\n";
