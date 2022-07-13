@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 startRecord(currentRecordPath);
-                stopRecord(5);
+                stopRecord(backupFile.getRecordingTime());
                 recordUri = FileProvider.getUriForFile(this, "com.example.rgbjava.fileprovider", fileRecord);
                 Toast.makeText(MainActivity.this, "Registrazione fermata", Toast.LENGTH_SHORT).show();
             } else {

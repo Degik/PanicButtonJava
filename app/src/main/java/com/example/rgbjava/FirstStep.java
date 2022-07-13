@@ -50,7 +50,7 @@ public class FirstStep extends AppCompatActivity {
                 boolean recordingEnabled = checkCameraEnabled.isChecked();
 
                 if(!(emptyString(firstName) || emptyString(lastName) || emptyString(numberPhone))){
-                    MainActivity.backupFile.makeBackupSettings(firstName, lastName, numberPhone, startTime, gpsEnabled, cameraEnabled, recordingEnabled);
+                    MainActivity.backupFile.makeBackupSettings(firstName, lastName, numberPhone, startTime, gpsEnabled, cameraEnabled, recordingEnabled, 5);
                     openMain();
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
