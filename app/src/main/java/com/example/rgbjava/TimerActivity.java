@@ -14,18 +14,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.File;
-
 public class TimerActivity extends AppCompatActivity {
     private CountDownTimer countDownTimer;
     private Button buttonStop;
     private TextView textViewTimer;
-    private boolean timerRunning;
-    private long timeLeft;
     public static boolean panicEnabled = false;
     public static String posAddress;
     public static Uri uriFilePhoto;
-    public static Activity activityMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +81,5 @@ public class TimerActivity extends AppCompatActivity {
 
     public static Uri getUriFilePhoto(){
         return uriFilePhoto;
-    }
-
-    public static void setActivity(Activity activity){
-        activityMain = activity;
     }
 }
