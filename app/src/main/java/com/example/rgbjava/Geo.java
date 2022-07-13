@@ -1,5 +1,8 @@
 package com.example.rgbjava;
-
+/*
+    Davide Bulotta
+    Matricola: 596782
+ */
 /*
 Il Geo è un thread a parte
 Si occupa della costante geolocalizzazione dell'utente

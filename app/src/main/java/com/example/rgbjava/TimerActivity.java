@@ -1,5 +1,8 @@
 package com.example.rgbjava;
-
+/*
+    Davide Bulotta
+    Matricola: 596782
+ */
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;

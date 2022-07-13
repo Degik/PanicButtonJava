@@ -1,5 +1,8 @@
 package com.example.rgbjava;
-
+/*
+    Davide Bulotta
+    Matricola: 596782
+ */
 public class Contact {
     private String firstName;
     private String lastName;

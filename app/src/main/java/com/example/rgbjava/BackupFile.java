@@ -1,5 +1,10 @@
 package com.example.rgbjava;
 
+/*
+    Davide Bulotta
+    Matricola: 596782
+ */
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
