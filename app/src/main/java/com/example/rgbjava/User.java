@@ -30,27 +30,7 @@ public class User {
         return name;
     }
 
-    public String getLastname(){
-        return lastName;
-    }
-
-    public String getPhoneNumber(){
-        return phoneNumber;
-    }
-
-    public int getStartTime() {
-        return startTime;
-    }
-
-    public boolean isGpsEnabled(){
-        return gpsEnabled;
-    }
-
     public boolean isCameraEnabled() {
         return cameraEnabled;
-    }
-
-    public boolean isRecordingEnabled() {
-        return recordingEnabled;
     }
 }
