@@ -9,20 +9,15 @@ Si occupa della costante geolocalizzazione dell'utente
  */
 
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
-
-import androidx.core.app.ActivityCompat;
 
 import java.io.IOException;
 import java.util.List;

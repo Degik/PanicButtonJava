@@ -3,9 +3,6 @@ package com.example.rgbjava;
     Davide Bulotta
     Matricola: 596782
  */
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class User {
     private String name;
